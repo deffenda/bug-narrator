@@ -1,0 +1,40 @@
+name: BugNarrator
+options:
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    MACOSX_DEPLOYMENT_TARGET: 14.0
+targets:
+  BugNarrator:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Sources/BugNarrator
+    resources:
+      - path: CHANGELOG.md
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.abdenterprises.bugnarrator
+        PRODUCT_NAME: BugNarrator
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: Resources/Info.plist
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: YES
+  BugNarratorTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Tests/BugNarratorTests
+    dependencies:
+      - target: BugNarrator
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.abdenterprises.bugnarrator.tests
+        PRODUCT_NAME: BugNarratorTests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic

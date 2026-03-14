@@ -1,0 +1,190 @@
+import Foundation
+
+actor GitHubExportProvider {
+    private let session: URLSession
+
+    init(session: URLSession? = nil) {
+        if let session {
+            self.session = session
+        } else {
+            let configuration = URLSessionConfiguration.ephemeral
+            configuration.timeoutIntervalForRequest = 60
+            configuration.timeoutIntervalForResource = 90
+            self.session = URLSession(configuration: configuration)
+        }
+    }
+
+    func export(
+        issues: [ExtractedIssue],
+        session reviewSession: TranscriptSession,
+        configuration: GitHubExportConfiguration
+    ) async throws -> [ExportResult] {
+        guard configuration.isComplete else {
+            throw AppError.exportConfigurationMissing(
+                "GitHub export requires a personal access token, repository owner, and repository name."
+            )
+        }
+
+        var results: [ExportResult] = []
+
+        for issue in issues {
+            let request = try makeURLRequest(issue: issue, session: reviewSession, configuration: configuration)
+
+            do {
+                let (data, response) = try await session.data(for: request)
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    throw AppError.exportFailure("GitHub returned an invalid response.")
+                }
+
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    throw mapGitHubError(statusCode: httpResponse.statusCode, data: data, configuration: configuration)
+                }
+
+                let payload = try JSONDecoder().decode(GitHubIssueResponse.self, from: data)
+                results.append(
+                    ExportResult(
+                        sourceIssueID: issue.id,
+                        destination: .github,
+                        remoteIdentifier: "#\(payload.number)",
+                        remoteURL: payload.htmlURL
+                    )
+                )
+            } catch {
+                let mappedError = OpenAIErrorMapper.mapTransportError(error, fallback: AppError.exportFailure)
+                throw partialExportError(mappedError, successfulCount: results.count)
+            }
+        }
+
+        return results
+    }
+
+    func makeURLRequest(
+        issue: ExtractedIssue,
+        session reviewSession: TranscriptSession,
+        configuration: GitHubExportConfiguration
+    ) throws -> URLRequest {
+        let owner = configuration.owner.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
+            ?? configuration.owner
+        let repository = configuration.repository.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
+            ?? configuration.repository
+        let endpoint = URL(string: "https://api.github.com/repos/\(owner)/\(repository)/issues")!
+
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(configuration.token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("BugNarrator", forHTTPHeaderField: "User-Agent")
+        request.httpBody = try JSONEncoder().encode(
+            GitHubIssueRequest(
+                title: issue.title,
+                body: makeIssueBody(issue: issue, session: reviewSession),
+                labels: configuration.labels.isEmpty ? nil : configuration.labels
+            )
+        )
+        return request
+    }
+
+    private func makeIssueBody(issue: ExtractedIssue, session: TranscriptSession) -> String {
+        var lines: [String] = [
+            "## Summary",
+            issue.summary,
+            "",
+            "## Evidence",
+            issue.evidenceExcerpt,
+            ""
+        ]
+
+        if let timestampLabel = issue.timestampLabel {
+            lines.append("- Transcript time: `\(timestampLabel)`")
+        }
+
+        if let sectionTitle = issue.sectionTitle, !sectionTitle.isEmpty {
+            lines.append("- Transcript section: \(sectionTitle)")
+        }
+
+        if let confidenceLabel = issue.confidenceLabel {
+            lines.append("- Confidence: \(confidenceLabel)")
+        }
+
+        if issue.requiresReview {
+            lines.append("- Review needed: Yes")
+        }
+
+        let screenshots = session.screenshots(for: issue)
+        if !screenshots.isEmpty {
+            lines.append("")
+            lines.append("## Related Screenshots")
+            for screenshot in screenshots {
+                lines.append("- \(screenshot.fileName) (`\(screenshot.timeLabel)`) - attach manually from the exported session bundle if needed.")
+            }
+        }
+
+        lines.append("")
+        lines.append("## Source")
+        lines.append("Exported from BugNarrator. Review against the raw transcript before triage.")
+
+        return lines.joined(separator: "\n")
+    }
+
+    private func mapGitHubError(
+        statusCode: Int,
+        data: Data,
+        configuration: GitHubExportConfiguration
+    ) -> AppError {
+        let message = decodeGitHubMessage(from: data) ?? HTTPURLResponse.localizedString(forStatusCode: statusCode)
+        let normalizedMessage = message.lowercased()
+
+        if statusCode == 401 || statusCode == 403 {
+            if normalizedMessage.contains("rate limit") {
+                return .exportFailure("GitHub rate limited the request. Wait a moment and try again.")
+            }
+
+            return .exportFailure("GitHub rejected the token or repository access for \(configuration.owner)/\(configuration.repository).")
+        }
+
+        if statusCode == 404 {
+            return .exportFailure("GitHub could not find \(configuration.owner)/\(configuration.repository). Check the owner, repository name, and token permissions.")
+        }
+
+        if statusCode == 422 {
+            return .exportFailure("GitHub rejected the issue payload: \(message)")
+        }
+
+        return .exportFailure("GitHub returned \(statusCode): \(message)")
+    }
+
+    private func decodeGitHubMessage(from data: Data) -> String? {
+        (try? JSONDecoder().decode(GitHubErrorResponse.self, from: data))?.message
+    }
+
+    private func partialExportError(_ error: AppError, successfulCount: Int) -> AppError {
+        guard successfulCount > 0 else {
+            return error
+        }
+
+        return .exportFailure(
+            "GitHub exported \(successfulCount) issue\(successfulCount == 1 ? "" : "s") before failing. \(error.userMessage)"
+        )
+    }
+}
+
+private struct GitHubIssueRequest: Encodable {
+    let title: String
+    let body: String
+    let labels: [String]?
+}
+
+private struct GitHubIssueResponse: Decodable {
+    let number: Int
+    let htmlURL: URL?
+
+    enum CodingKeys: String, CodingKey {
+        case number
+        case htmlURL = "html_url"
+    }
+}
+
+private struct GitHubErrorResponse: Decodable {
+    let message: String
+}
