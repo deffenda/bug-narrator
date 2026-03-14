@@ -1,42 +1,44 @@
 # BugNarrator
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![macOS](https://img.shields.io/badge/macOS-14%2B-black)](https://www.apple.com/macos/)
 
 BugNarrator is a macOS menu bar tool for narrated software testing sessions that automatically captures transcripts, markers, screenshots, and extracted issues.
 
-## Status
+## Download
 
-BugNarrator is an early but functional macOS utility. The current app supports:
+- [Download the latest macOS DMG](https://github.com/deffenda/bugnarrator/releases/latest/download/BugNarrator-macOS.dmg)
+- [View the latest release page](https://github.com/deffenda/bugnarrator/releases/latest)
 
-- background microphone recording from the menu bar
-- OpenAI transcription after the session ends
-- timeline markers during a live review
-- screenshot capture during a live review
-- a session library with date filters, search, sort, and deletion
-- draft issue extraction from the transcript
-- export of selected issues to GitHub Issues and Jira Cloud
+If the direct DMG link is not live yet, use the release page and download the newest `BugNarrator-macOS.dmg` or `BugNarrator-vX.Y.Z-macOS.dmg` asset there.
 
-## What It Does
+## Support Development
 
-BugNarrator is designed for software-review workflows where you are actively clicking around another product while speaking aloud.
+BugNarrator is free to use. If it helps your workflow, consider supporting development.
 
-Core workflow:
+- [Support BugNarrator on PayPal](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8)
 
-1. Launch BugNarrator from Xcode.
-2. Add your own OpenAI API key in Settings.
-3. Start a feedback session from the menu bar or session hotkey.
-4. Keep reviewing the target app normally with your keyboard and mouse.
-5. Insert markers and screenshots whenever you hit an important moment.
-6. Stop the session.
-7. BugNarrator uploads the finished audio to OpenAI for transcription.
-8. Review the transcript, markers, screenshots, and extracted issues in the session library window.
-9. Export the session bundle or selected issues when needed.
+## What BugNarrator Does
+
+BugNarrator is built for software-review and software-testing workflows where you want to keep clicking through an app while speaking your notes out loud.
+
+It can:
+
+- record a narrated session from the menu bar
+- transcribe the finished recording with the OpenAI API
+- insert markers during a live review
+- capture screenshots during a live review
+- generate a review summary
+- extract draft bugs, UX issues, enhancements, and follow-up questions
+- export selected issues to GitHub Issues or Jira Cloud
+- export a local session bundle with transcript and screenshot artifacts
+- keep a searchable session library with date filters and deletion
 
 ## Bring Your Own OpenAI API Key
 
-BugNarrator does not include a built-in OpenAI API key.
+BugNarrator does not ship with a built-in OpenAI API key.
 
-Every user must provide their own key in Settings before transcription or issue extraction will work.
+Every user must provide their own key in `Settings` before transcription or issue extraction will work.
 
 Important:
 
@@ -44,350 +46,180 @@ Important:
 - issue extraction also uses the OpenAI API
 - OpenAI usage may cost money on your account
 - the app stores your key in macOS Keychain when available
-- the app does not embed your key in source control or the compiled app
+- the key is not bundled into the source code or compiled app
 
-## Screenshots
+## Install On macOS
 
-Add screenshots here before publishing the repo:
+1. Download the latest DMG from [GitHub Releases](https://github.com/deffenda/bugnarrator/releases/latest).
+2. Open the DMG.
+3. Drag `BugNarrator.app` into `Applications`.
+4. Launch BugNarrator from `Applications`.
+5. If Gatekeeper warns about the app, use Finder and choose `Open` for the app you trust.
+6. On first run, expect microphone permission and OpenAI API key setup.
+7. If you use screenshot capture, expect Screen Recording permission on first use.
 
-- menu bar idle state
-- menu bar recording state with live marker and screenshot controls
-- settings window with OpenAI, GitHub, and Jira configuration
-- session library showing sidebar filters, session list, and detail pane tabs
+## Quick Start
 
-## About And Support
+1. Launch BugNarrator and open the menu bar item.
+2. Open `Settings`.
+3. Paste your own `OpenAI API Key`.
+4. Optionally click `Validate Key`.
+5. Click `Start Feedback Session`.
+6. Speak while you continue reviewing the target app.
+7. Insert markers or screenshots whenever something important happens.
+8. Click `Stop Feedback Session`.
+9. Review the transcript, screenshots, summary, and extracted issues in the session library.
+10. Export a session bundle or selected issues when needed.
 
-BugNarrator includes a dedicated About window from the menu bar so users can quickly find product info, version details, release notes, and support links.
+## Session Workflow
 
-- GitHub repository: [github.com/abdenterprises/bugnarrator](https://github.com/abdenterprises/bugnarrator)
-- User documentation: [Open the user guide](docs/UserGuide.md)
-- Documentation link in the app: [Read the hosted user guide](https://github.com/abdenterprises/bugnarrator/blob/main/docs/UserGuide.md)
-- Report an issue: [Open a new GitHub issue](https://github.com/abdenterprises/bugnarrator/issues/new)
-- Releases / manual update checks: [GitHub Releases](https://github.com/abdenterprises/bugnarrator/releases)
-- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
-- Support development: the About window and menu bar include a dedicated donation screen with PayPal donation buttons
+### Recording
 
-## Requirements
+BugNarrator records in the background while you switch apps and continue normal mouse or keyboard interaction. It does not type live dictation into the frontmost app.
 
-- macOS 14.0 or later
-- Xcode 26.3 or later recommended
-- an OpenAI API key with access to audio transcription
-- microphone permission
-- Screen Recording permission if you want screenshot capture
-- optional GitHub personal access token for GitHub export
-- optional Jira Cloud credentials for Jira export
+### Markers
 
-## Repo Layout
+Markers let you flag important moments during a session. Each marker stores a timestamp and appears in the transcript review UI and transcript exports.
 
-- `BugNarrator.xcodeproj`: generated Xcode project
-- `project.yml`: XcodeGen project definition
-- `Sources/BugNarrator`: app source
-- `Resources`: app resources including `Info.plist`
-- `docs/UserGuide.md`: user-facing product guide
-- `docs/QA_CHECKLIST.md`: manual QA checklist
-- `docs/TESTING_NOTES.md`: testing notes
-- `docs/RELEASE_CHECKLIST.md`: release-readiness checklist
-- `Tests/BugNarratorTests`: automated tests
+### Screenshot Capture
 
-## User Documentation
+Screenshots are captured only when you request them. Each screenshot is attached to the current session and can appear alongside markers and extracted issues.
 
-Full end-user documentation lives in [docs/UserGuide.md](docs/UserGuide.md).
+### Review Summary
 
-That guide is written for normal BugNarrator users and covers installation, permissions, narrated sessions, markers, screenshots, issue extraction, exports, troubleshooting, privacy, and support links.
+The review summary gives you a compact pass over the session before you read the full transcript.
 
-## Release Readiness
+### Issue Extraction
 
-BugNarrator includes a focused release-readiness checklist in [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md).
-
-Use it before publishing a build to verify:
-
-- app signing and launch behavior
-- OpenAI key setup and transcription flow
-- session-library behavior under repeated daily usage
-- marker, screenshot, export, and deletion workflows
-- documentation, support links, and changelog accuracy
-
-## Setup
-
-1. Clone the repo.
-2. Open `BugNarrator.xcodeproj` in Xcode.
-3. Select your own Apple signing team for local runs if needed.
-4. Build and run the app.
-5. Open `Settings` from the menu bar.
-6. Paste your own OpenAI API key into `OpenAI API Key`.
-7. Optionally click `Validate Key`.
-
-If you change the project definition, regenerate the Xcode project with:
-
-```bash
-xcodegen generate
-```
-
-## Run Locally
-
-Build:
-
-```bash
-xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO build
-```
-
-Test:
-
-```bash
-xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO test
-```
-
-## Configure BugNarrator
-
-### OpenAI
-
-Open `Settings` from the menu bar and configure:
-
-- `OpenAI API Key`
-- transcription model, default `whisper-1`
-- optional language hint
-- optional transcription prompt
-- issue extraction model
-- optional automatic issue extraction after transcription
-
-### Hotkeys
-
-BugNarrator supports separate global hotkeys for:
-
-- starting or stopping a feedback session
-- inserting a marker
-- capturing a screenshot
-
-These use Carbon hotkeys and do not require Accessibility access.
-
-### GitHub Export
-
-To export selected extracted issues to GitHub Issues, configure:
-
-- GitHub personal access token
-- repository owner
-- repository name
-- optional default labels
-
-The token is stored in Keychain when available.
-
-### Jira Export
-
-To export selected extracted issues to Jira Cloud, configure:
-
-- Jira Cloud base URL
-- Jira email
-- Jira API token
-- Jira project key
-- Jira issue type
-
-The Jira token is stored in Keychain when available.
-
-## Using BugNarrator
-
-### Start And Stop A Session
-
-1. Open the menu bar item.
-2. Click `Start Feedback Session`.
-3. Speak while using your Mac normally.
-4. Click `Stop Feedback Session` when you are done.
-
-### Product Info And Help
-
-From the menu bar, you can open:
-
-- `About BugNarrator`
-- `What’s New`
-- `View Documentation`
-- `Report an Issue`
-- `Support Development`
-- `Check for Updates`
-
-`View Documentation` opens the hosted user guide, and `Report an Issue` opens the GitHub new-issue form in your default browser. The About window shows the current app version and build from bundle metadata, project links, and a short product summary.
-
-### Browse The Session Library
-
-After each completed session, BugNarrator opens a three-column session library:
-
-- a sidebar with `Today`, `Yesterday`, `Last 7 Days`, `Last 30 Days`, `All Sessions`, and `Custom Date Range`
-- a searchable session list with newest-first or oldest-first sorting
-- a detail pane with raw transcript, markers, screenshots, extracted issues, and export actions
-
-The session list is intended for heavy daily use. Each row shows the recorded time, duration, transcript preview, and counts for markers, screenshots, and extracted issues.
-
-You can also permanently delete a session from the toolbar or the session row context menu. Deleting a session removes it from the library immediately and also removes locally stored screenshots for that session. Files you previously exported outside BugNarrator are not removed.
-
-### Insert Markers
-
-Use the menu bar action, session library live-review control, or marker hotkey while recording.
-
-Each marker stores:
-
-- elapsed session time
-- created timestamp
-- title
-- optional note
-
-Markers appear in the review window, session history, and transcript exports.
-
-### Capture Screenshots
-
-Use the menu bar action, session library live-review control, or screenshot hotkey while recording.
-
-Each screenshot stores:
-
-- file path
-- elapsed session time
-- created timestamp
-- optional nearest-marker association
-
-Screenshots appear in the review window and session bundle export.
-
-### Review Extracted Issues
-
-After transcription, you can run issue extraction manually or automatically.
-
-BugNarrator creates reviewable draft issues in these categories:
+BugNarrator can turn the session transcript into draft review items in categories such as:
 
 - Bug
 - UX Issue
 - Enhancement
 - Question / Follow-up
 
-Each draft issue includes:
+These are drafts. Review them before export.
 
-- title
-- category
-- summary
-- transcript evidence excerpt
-- timestamp when available
-- related screenshots when available
-- confidence when available
-- review-needed flag
+### Session Library
 
-You can edit issues and choose which ones to export.
+The session library is designed for repeated daily use and supports:
 
-### Export
+- `Today`, `Yesterday`, `Last 7 Days`, `Last 30 Days`, `All Sessions`, and `Custom Date Range`
+- search across transcript text, titles, and summaries
+- newest-first or oldest-first sorting
+- inline detail review for transcript, markers, screenshots, summary, and extracted issues
+- permanent deletion of sessions you no longer want to keep
 
-BugNarrator supports:
+## Export Options
+
+### Export Session Bundle
+
+Use `Export Session Bundle` when you want a local package of the review session. The bundle can include:
 
 - `transcript.txt`
 - `transcript.md`
-- session bundle export with `summary.md` and `screenshots/`
-- selected issue export to GitHub Issues
-- selected issue export to Jira Cloud
+- `summary.md`
+- `screenshots/`
 
-Exports are always explicit user actions. The app does not silently create remote issues.
+### Export To GitHub
+
+Configure your GitHub token, repository owner, and repository name in Settings, then export selected extracted issues as GitHub Issues.
+
+### Export To Jira
+
+Configure your Jira Cloud URL, email, API token, project key, and issue type in Settings, then export selected extracted issues as Jira issues.
 
 ## Permissions
 
 ### Microphone
 
-BugNarrator requests microphone access the first time you record. If access is denied, recording does not start and the app explains how to re-enable permission in System Settings.
+BugNarrator requests microphone permission the first time you start a recording.
 
 ### Screen Recording
 
-Screenshot capture may prompt for Screen Recording permission on first use. If macOS blocks capture, BugNarrator keeps recording and surfaces a clear screenshot-specific error.
+Screenshot capture may prompt for Screen Recording permission on first use.
 
 ### Accessibility
 
-BugNarrator does not simulate typing into other apps and does not require Accessibility permission for its core workflow.
+BugNarrator does not require Accessibility permission for its core workflow because it does not simulate typing into other apps.
 
-## Local Storage
+## Privacy And Data Handling
 
-BugNarrator stores data locally in `~/Library/Application Support/BugNarrator/`.
+Data that stays local on your Mac:
 
-That includes:
-
-- transcript history
-- session asset folders for screenshots
+- session history
+- transcripts after they return from OpenAI
+- markers
+- screenshots and screenshot metadata
+- extracted issue drafts
 - exported bundles you explicitly create
 
-Temporary audio files are removed after success, failure, or cancellation unless `Debug Mode` is enabled.
-Deleting a saved session also removes its locally managed screenshot folder when one exists.
+Data sent to OpenAI:
 
-## Troubleshooting
+- recorded audio when you stop a session and request transcription
+- transcript context used for issue extraction or summary generation
 
-### No OpenAI API key configured
+BugNarrator does not continuously upload audio while you are still recording.
 
-Open Settings and add your own key. Recording is blocked until the key is present.
+## Download, Help, And Support Links
 
-### Invalid or revoked OpenAI API key
+- [Latest macOS release page](https://github.com/deffenda/bugnarrator/releases/latest)
+- [User documentation](docs/UserGuide.md)
+- [Hosted user guide](https://github.com/deffenda/bugnarrator/blob/main/docs/UserGuide.md)
+- [Report a bug or request a feature](https://github.com/deffenda/bugnarrator/issues/new)
+- [Support development](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8)
+- [Changelog](CHANGELOG.md)
 
-Use `Validate Key` in Settings, then replace the key if OpenAI rejects it.
+## Build From Source
 
-### Microphone permission denied
+Open `BugNarrator.xcodeproj` in Xcode and build the `BugNarrator` scheme, or use:
 
-Re-enable microphone access for BugNarrator in macOS System Settings and try again.
+```bash
+xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO build
+```
 
-### Screenshot capture failed
+Run tests with:
 
-Check Screen Recording permission in System Settings. Recording should still continue even if a screenshot fails.
+```bash
+xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO test
+```
 
-### Issue extraction failed
+## Build The DMG
 
-The raw transcript is still preserved. Retry extraction after checking your OpenAI key, model configuration, and network connection.
+BugNarrator includes a repeatable local packaging script:
 
-### GitHub export failed
+```bash
+./scripts/build_dmg.sh
+```
 
-Check the GitHub token, repository owner, repository name, and repository access.
+The script builds a Release app, creates a DMG with `BugNarrator.app` plus an `Applications` shortcut, and writes artifacts to `dist/`.
 
-### Jira export failed
+Full packaging details live in [docs/Distribution.md](docs/Distribution.md).
 
-Check the Jira Cloud URL, email, API token, project key, and issue type.
+For public distribution, prefer a signed and notarized build. The packaging script supports signed local builds when you provide your Apple team in the environment.
 
-### Empty transcript
+## Documentation
 
-Verify microphone input is working and that the recording actually contains speech.
-
-### A session is missing from the library
-
-Check the active date filter, custom date range, and search text first. The library defaults to `Today` when possible, so older sessions may be hidden until you switch to `All Sessions` or widen the date range.
-
-### A project-info link did not open
-
-Try the same link from the About window. If the browser still does not open, verify your default browser configuration and confirm the URL constants in `Sources/BugNarrator/Utilities/BugNarratorLinks.swift` if you are running a local build.
-
-## Security And Privacy
-
-- BugNarrator requires each user to bring their own OpenAI API key
-- the app does not bundle OpenAI, GitHub, or Jira credentials
-- secrets are stored in Keychain when available
-- audio is recorded locally first and uploaded only after you stop the session
-- transcripts, markers, screenshots, and extracted issues stay local unless you explicitly export or send them to an external API
-
-See [SECURITY.md](SECURITY.md) for more detail.
+- [QUICKSTART.md](QUICKSTART.md)
+- [docs/UserGuide.md](docs/UserGuide.md)
+- [docs/Distribution.md](docs/Distribution.md)
+- [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md)
+- [docs/TESTING_NOTES.md](docs/TESTING_NOTES.md)
+- [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)
+- [SECURITY.md](SECURITY.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Known Limitations
 
 - transcription and issue extraction require network access
-- there is no offline Whisper mode yet
-- screenshot capture still uses a deprecated CoreGraphics capture API and should move to ScreenCaptureKit
-- screenshot export references filenames in GitHub and Jira bodies rather than uploading attachments automatically
-- extracted issues are drafts and must be reviewed before export
-- session deletion is currently permanent; there is no recently deleted or restore flow yet
-
-## Supporting The Project
-
-BugNarrator is free to use. If it helps your review workflow, you can optionally support ongoing development from the in-app `Support Development` screen.
-
-- [Donate $5](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8&amount=5&currency_code=USD)
-- [Donate $10](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8&amount=10&currency_code=USD)
-- [Donate $20](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8&amount=20&currency_code=USD)
-
-All donations open externally in PayPal. BugNarrator does not process payments or store financial data.
-
-## Roadmap
-
-- improve release packaging for public distribution
-- migrate screenshot capture to newer macOS APIs
-- add bulk delete and recently deleted recovery for the session library
-- improve issue extraction quality and evidence linking
-- support attachment upload for export providers where practical
+- BugNarrator does not yet support offline Whisper
+- screenshot capture still uses a deprecated CoreGraphics API and should move to ScreenCaptureKit
+- GitHub and Jira export include screenshot references in issue bodies instead of uploading attachments automatically
+- session deletion is permanent today
 
 ## Contributing
 
-Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ## License
 
@@ -396,13 +228,3 @@ BugNarrator is licensed under the Apache License 2.0.
 This license allows users to freely use, modify, and distribute the software, including for commercial purposes, as long as attribution and license terms are preserved.
 
 See the [LICENSE](LICENSE) file for details.
-
-Useful docs:
-
-- [QUICKSTART.md](QUICKSTART.md)
-- [SECURITY.md](SECURITY.md)
-- [CHANGELOG.md](CHANGELOG.md)
-- [docs/UserGuide.md](docs/UserGuide.md)
-- [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md)
-- [docs/TESTING_NOTES.md](docs/TESTING_NOTES.md)
-- [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)

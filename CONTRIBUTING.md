@@ -8,6 +8,7 @@ Thanks for contributing to BugNarrator.
 2. Select your own Apple signing team for local runs.
 3. Use your own OpenAI API key for live transcription or issue extraction tests.
 4. Use your own GitHub or Jira credentials if you want to test exports against real services.
+5. See [docs/Distribution.md](docs/Distribution.md) if you need to build a release app or DMG.
 
 ## Expectations
 
@@ -29,6 +30,7 @@ Thanks for contributing to BugNarrator.
 Before submitting changes:
 
 - run `xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO test`
+- run `scripts/build_dmg.sh` if your changes affect packaging, install flow, or release docs
 - run the relevant checks from `docs/QA_CHECKLIST.md`
 - verify setup and failure paths when your changes touch recording, extraction, or export
 

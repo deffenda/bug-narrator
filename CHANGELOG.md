@@ -6,6 +6,7 @@
 - Added a scalable session library with date filters, search, sorting, and session deletion.
 - Added markers, screenshot capture, extracted issues, and GitHub or Jira export workflows.
 - Added a polished About BugNarrator window, project links, support-development action, and in-app changelog viewer.
+- Added a repeatable DMG packaging workflow, release documentation, and clearer download or support guidance for end users.
 
 ## 0.9.0 - 2026-03-13
 

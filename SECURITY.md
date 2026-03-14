@@ -1,5 +1,7 @@
 # Security Notes
 
+BugNarrator is distributed as a local macOS app. Release builds and DMGs should be signed and notarized before public distribution whenever practical.
+
 ## Credentials
 
 BugNarrator uses a bring-your-own-credentials model.
@@ -48,6 +50,8 @@ BugNarrator stores these items locally on your Mac:
 - temporary audio files until cleanup
 
 Temporary audio files are removed after success, failure, or cancellation unless `Debug Mode` is enabled.
+
+Release artifacts created locally by the packaging script are written to `dist/` by default and should not be committed to the repository.
 
 ## Logging Expectations
 

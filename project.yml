@@ -14,6 +14,7 @@ targets:
       - path: Sources/BugNarrator
     resources:
       - path: CHANGELOG.md
+      - path: Resources/Assets.xcassets
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.abdenterprises.bugnarrator

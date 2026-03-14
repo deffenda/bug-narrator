@@ -1,91 +1,106 @@
 # BugNarrator User Guide
 
-BugNarrator is a macOS menu bar app for narrated software testing sessions. It lets you speak through a workflow while you click around a product, then turns that session into a transcript, supporting evidence, and draft issues you can review or export.
+BugNarrator is a macOS menu bar app for narrated software testing sessions. It helps developers, testers, and product owners talk through a workflow, capture evidence, and turn that session into a transcript plus draft issues they can review or export.
 
 ## Getting Help
 
-- Report a Bug: [GitHub Issue Form](https://github.com/abdenterprises/bugnarrator/issues/new)
-- Request a Feature: [GitHub Issue Form](https://github.com/abdenterprises/bugnarrator/issues/new)
-- Documentation: [User Guide](https://github.com/abdenterprises/bugnarrator/blob/main/docs/UserGuide.md)
-- Support Development: [Support BugNarrator](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8)
+- [Download the latest macOS release](https://github.com/deffenda/bugnarrator/releases/latest)
+- [Report a Bug](https://github.com/deffenda/bugnarrator/issues/new)
+- [Request a Feature](https://github.com/deffenda/bugnarrator/issues/new)
+- [Support Development](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8)
 
-## Introduction
+## What BugNarrator Is
 
-BugNarrator helps developers, testers, and product owners narrate software walkthroughs, preserve evidence from what they saw on screen, and turn spoken testing notes into actionable review output.
+BugNarrator is built for software walkthroughs and testing passes where you want to keep reviewing the target app instead of stopping to type notes.
 
-Use it when you want to:
+It helps you:
 
-- record a narrated test pass without typing live notes
-- capture timestamps for moments that matter
-- save screenshots while you keep talking
-- review a complete transcript after the session ends
+- record narrated testing sessions
+- create a transcript after the session ends
+- mark important moments with timeline markers
+- attach screenshots to the review session
+- generate a review summary
 - extract draft bugs, UX issues, enhancements, and follow-up questions
-- export issues to GitHub Issues or Jira Cloud
+- export selected issues to GitHub Issues or Jira Cloud
+- browse and clean up old sessions from a session library
 
-## Installation
+## Download And Installation
 
-Run BugNarrator by opening the app from Xcode or from a signed build you trust.
+### Install From The DMG
 
-Requirements:
+1. Download the latest macOS release from [GitHub Releases](https://github.com/deffenda/bugnarrator/releases/latest).
+2. Open the downloaded DMG.
+3. Drag `BugNarrator.app` into `Applications`.
+4. Launch BugNarrator from `Applications`.
+5. If macOS shows a Gatekeeper warning, use Finder and choose `Open` for the app you trust.
+
+### macOS Requirements
 
 - macOS 14 or later
-- microphone access
+- microphone permission for recording
 - Screen Recording permission if you want screenshot capture
 - your own OpenAI API key for transcription and issue extraction
 
-When you start your first session, macOS may ask for microphone permission. BugNarrator cannot record narrated sessions without it.
-
-If you use screenshots during sessions, macOS may also ask for Screen Recording permission. BugNarrator uses that permission only to capture screenshots you explicitly request.
-
-## Getting Started
+## First Run
 
 1. Launch BugNarrator and confirm the menu bar icon appears.
 2. Open `Settings`.
 3. Paste your own `OpenAI API Key`.
-4. Start a session with `Start Feedback Session`.
-5. Speak naturally while using the product you are reviewing.
-6. Stop the session with `Stop Feedback Session`.
-7. Wait for transcription to finish.
-8. Review the completed session in the session library.
+4. Optionally click `Validate Key`.
+5. Start a session with `Start Feedback Session`.
 
-BugNarrator does not ship with a built-in OpenAI API key. Transcription and issue extraction use your own OpenAI account and may incur charges based on OpenAI pricing.
+BugNarrator does not ship with a built-in OpenAI API key. Transcription and issue extraction use your own OpenAI account and may incur charges under OpenAI pricing.
+
+## Core Workflow
+
+### Start A Narrated Testing Session
+
+Start a session from the menu bar or by using your configured recording hotkey. BugNarrator records in the background while you keep working in other apps.
+
+### Stop A Session
+
+When you finish, stop the session from the menu bar or hotkey. BugNarrator then uploads the recorded audio to OpenAI and waits for the transcript result.
+
+### Review The Session
+
+After transcription completes, BugNarrator opens the session library so you can inspect the transcript, markers, screenshots, summary, and extracted issues in one place.
 
 ## Core Features
 
 ### Recording Narrated Testing Sessions
 
-Start a session from the menu bar or with the configured recording hotkey. Recording continues while you switch apps, click, type, and navigate normally.
+Recording is designed for real software review work. You can switch apps, click, type, and navigate normally while the microphone session continues in the background.
 
 ### Transcript Generation
 
-When you stop a session, BugNarrator uploads the recorded audio to the OpenAI transcription API and generates a transcript after the session ends. The transcript is then shown in the session library and can be copied or exported.
+BugNarrator generates the transcript only after the session ends. It does not try to type live dictation into the active app.
 
 ### Markers
 
-Insert markers during a live session to mark important moments. Markers save the elapsed session time and appear in the transcript review window and exports.
+Markers let you flag moments that matter while the session is still running. They help you jump to specific points in the transcript later and appear in transcript exports.
 
 ### Screenshot Capture
 
-Capture screenshots during recording without interrupting the session. Screenshots are stored with the session and shown in the review UI.
+Use screenshot capture to save visual evidence during a review. Each screenshot is attached to the current session and can be associated with nearby markers.
 
 ### Review Summary
 
-Each session can include a summary view so you can quickly understand what happened before reading the full transcript.
+The summary view gives you a quick understanding of what the session covered before you read the full transcript.
 
 ### Issue Extraction
 
-Run issue extraction after transcription to generate reviewable draft issues. BugNarrator groups these into categories such as:
+Issue extraction creates reviewable draft issues in categories such as:
 
 - Bug
 - UX Issue
 - Enhancement
 - Question / Follow-up
 
-These are draft issues. Review them before export.
+Each extracted item keeps evidence from the transcript and should be reviewed before export.
 
 ### Export Session Bundle
 
-Export a local session bundle when you want a portable copy of the session output. This can include:
+Use this when you want a portable local copy of the session. The bundle can include:
 
 - `transcript.txt`
 - `transcript.md`
@@ -94,44 +109,30 @@ Export a local session bundle when you want a portable copy of the session outpu
 
 ### Export To GitHub
 
-Select extracted issues and export them to GitHub Issues after configuring your repository owner, repository name, and personal access token in Settings.
+After you configure your GitHub token, repository owner, and repository name in Settings, you can export selected extracted issues as GitHub Issues.
 
 ### Export To Jira
 
-Select extracted issues and export them to Jira Cloud after configuring your Jira base URL, email, API token, project key, and issue type in Settings.
+After you configure your Jira Cloud URL, email, API token, project key, and issue type in Settings, you can export selected extracted issues as Jira issues.
 
 ## Session Library
 
-BugNarrator keeps your sessions in a library designed for repeated daily use.
+The session library is the main place to revisit earlier work.
 
 You can:
 
 - browse `Today`, `Yesterday`, `Last 7 Days`, `Last 30 Days`, or `All Sessions`
-- set a custom date range
-- search transcript content, titles, and summaries
-- sort newest first or oldest first
-- open a session detail pane for transcript, markers, screenshots, extracted issues, and export actions
+- use a custom date range
+- search transcript text, titles, and summaries
+- sort by newest first or oldest first
+- open a detail pane with transcript, markers, screenshots, summary, and extracted issues
 - delete sessions you no longer need
 
-Deleting a session removes it from the library immediately and removes local screenshot files associated with that session. Exported files outside BugNarrator are not removed.
-
-## Exporting Results
-
-### Export Session Bundle
-
-Use this when you want a local package of the session transcript and screenshots for review, sharing, or archival.
-
-### GitHub Issue Export
-
-Use GitHub export when you want selected extracted issues turned into GitHub Issues with transcript evidence and timestamps included in the body.
-
-### Jira Issue Export
-
-Use Jira export when you want selected extracted issues turned into Jira issues with transcript evidence and timestamps included in the description.
+Deleting a session removes it from the library immediately and also removes local screenshot files that BugNarrator manages for that session. Exported files outside the app are not deleted.
 
 ## Support Development
 
-BugNarrator includes an optional support screen for users who want to fund ongoing development. Donations are optional and are separate from any OpenAI usage charges.
+BugNarrator is free to use. Donations are optional and separate from any OpenAI costs.
 
 - [Donate $5](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8&amount=5&currency_code=USD)
 - [Donate $10](https://www.paypal.com/donate/?hosted_button_id=FWFQ6KCZBWWH8&amount=10&currency_code=USD)
@@ -141,49 +142,55 @@ BugNarrator includes an optional support screen for users who want to fund ongoi
 
 ### No Transcript Generated
 
-- confirm your OpenAI API key is set in Settings
-- confirm the key is valid
+- confirm your OpenAI API key is configured in `Settings`
+- validate the key if needed
 - confirm the Mac has network access
-- try again with a short test recording to rule out an empty or corrupt audio file
+- retry with a short test recording to rule out an empty or corrupt audio file
 
 ### Microphone Permission Problems
 
-- open macOS System Settings and verify microphone permission is granted to BugNarrator
+- open macOS System Settings
+- verify microphone permission is granted to BugNarrator
 - restart the app after changing permission settings if needed
 
 ### API Key Missing
 
 - open `Settings`
 - paste your own OpenAI API key
-- use `Validate Key` if available
+- click `Validate Key` if you want to check it before recording
 
 ### Screenshots Not Appearing
 
-- confirm a session was actively recording when the screenshot was requested
-- confirm Screen Recording permission is granted if macOS asked for it
-- try another screenshot to rule out a temporary permission or storage failure
+- confirm the session was actively recording when the screenshot was requested
+- confirm Screen Recording permission is granted if macOS prompted for it
+- try another screenshot to rule out a temporary storage failure
 
 ### Export Errors
 
 - for GitHub, verify the token, repository owner, and repository name
 - for Jira, verify the base URL, email, API token, project key, and issue type
-- confirm your network connection is available
+- confirm your Mac still has network access
 
 ## Privacy
 
-BugNarrator keeps most session data local on your Mac, including:
+What stays local on your Mac:
 
-- session history
+- saved session history
 - markers
-- screenshots
+- screenshots and screenshot metadata
 - extracted issue drafts
-- export configuration fields
-
-Sensitive credentials such as API keys and tokens are stored in Keychain when available.
+- exported session bundles
 
 What is sent to OpenAI:
 
-- recorded audio for transcription
-- transcript context used for issue extraction
+- recorded audio after you stop a session and request transcription
+- transcript context used for review summary or issue extraction
 
-BugNarrator does not bundle a shared API key. Your own API key is required, and OpenAI API usage is billed to your account under OpenAI’s pricing and policies.
+BugNarrator does not continuously stream live audio to OpenAI while you are still recording.
+
+## More Documentation
+
+- [Quickstart](../QUICKSTART.md)
+- [Distribution and DMG packaging](Distribution.md)
+- [Security Notes](../SECURITY.md)
+- [Project Changelog](../CHANGELOG.md)

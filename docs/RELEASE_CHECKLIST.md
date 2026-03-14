@@ -6,6 +6,7 @@ Use this checklist before cutting a public test build or release candidate.
 
 - Regenerate the project with `xcodegen generate` if `project.yml` changed.
 - Build the app in the intended configuration and confirm the build succeeds.
+- Run `./scripts/build_dmg.sh` and confirm the DMG packaging step succeeds.
 - If shipping a signed build, verify the Apple signing team, bundle identifier, and entitlements are correct.
 - Launch the built app and confirm the menu bar item appears.
 
@@ -47,10 +48,12 @@ Use this checklist before cutting a public test build or release candidate.
 - Open `View Documentation`, `Report an Issue`, `Support Development`, `What's New`, and `Check for Updates`.
 - Confirm every link opens the expected external destination.
 - Review the README, user guide, changelog, and support links for stale wording or placeholder text.
+- Review the `Download` and `Support Development` sections in `README.md` for visibility and accuracy.
 
 ## Before Publishing
 
 - Confirm no secrets, tokens, personal paths, or local-only files are tracked in git.
 - Review `.gitignore` for generated Xcode data and result bundles.
+- Upload `dist/BugNarrator-macOS.dmg` to the release and confirm the release asset name matches the README link strategy.
 - Run the automated test suite and confirm it passes.
 - Note any known limitations in the release notes or changelog before publishing.

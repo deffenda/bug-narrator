@@ -4,6 +4,9 @@
 
 - Build command run: `xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO build`
 - Build result: passed
+- Packaging command run: `./scripts/build_dmg.sh`
+- Packaging result: passed
+- Packaging validation: generated `dist/BugNarrator-v1.0-macOS.dmg` and `dist/BugNarrator-macOS.dmg`, mounted the DMG successfully, and verified it contains `BugNarrator.app` plus an `Applications` shortcut
 - Test command run: `xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO test`
 - Test result: passed
 - Test count: 69
@@ -38,6 +41,7 @@
 - real screenshot capture behavior with macOS Screen Recording permission
 - real GitHub export against a repository you control
 - real Jira Cloud export against a project you control
+- opening the generated DMG in Finder and validating the drag-to-Applications flow
 - visual review of the session library layout and menu bar UX
 
 ## Notes
