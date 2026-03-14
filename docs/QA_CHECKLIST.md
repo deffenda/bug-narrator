@@ -1,0 +1,146 @@
+# BugNarrator QA Checklist
+
+## Setup
+
+- Build and run `BugNarrator` from Xcode.
+- Confirm the menu bar item appears after launch.
+- Confirm the menu bar explains that the app requires the user's own OpenAI API key.
+- Open Settings and verify the onboarding copy explains that OpenAI usage may incur charges.
+- Verify the OpenAI API key can be entered, remains masked, and shows a secure-storage note.
+- Verify `Validate Key` reports success for a working key and a clear error for a bad key.
+- Verify `Remove Key` clears the stored OpenAI key.
+- Verify GitHub and Jira tokens remain masked and can be removed.
+- Confirm microphone permission is requested on the first recording attempt if it has not already been granted.
+- Confirm screenshot capture prompts for Screen Recording permission if macOS requires it.
+
+## About And Product Info
+
+- Open `About BugNarrator` from the menu bar.
+- Verify the About window opens and displays the app name, tagline, version, and build information.
+- Verify the GitHub repository action opens the project repository in the default browser.
+- Verify the documentation action opens the hosted `docs/UserGuide.md` page in the default browser.
+- Verify the report issue action opens the GitHub new-issue page.
+- Verify the support development action opens the support window.
+- Verify the support window shows `Donate $5`, `Donate $10`, and `Donate $20`.
+- Verify each donation button opens the configured PayPal donation page in the default browser.
+- Open `What’s New` from the menu bar or the About window.
+- Verify the changelog window opens and displays the bundled `CHANGELOG.md` content.
+- Verify `Check for Updates` opens the GitHub releases page.
+- Confirm there are no dead or mislabeled menu items in the project-info section.
+
+## Core Workflow
+
+- Start a feedback session from the menu bar.
+- Verify the status changes to `Recording`.
+- Verify the red recording indicator and elapsed timer appear and continue updating.
+- Switch between apps, click around, and keep speaking for at least 15 seconds.
+- Insert at least two markers during the session.
+- Capture at least one screenshot during the session.
+- Stop the session.
+- Verify the status changes to `Transcribing` and then `Success`.
+- Verify the session library window opens with the completed transcript selected.
+- Verify the transcript is copied to the clipboard when auto-copy is enabled.
+- Verify the new session appears in the session library immediately after the run.
+
+## Session Library Browsing
+
+- Verify the left sidebar shows `Today`, `Yesterday`, `Last 7 Days`, `Last 30 Days`, `All Sessions`, and `Custom Date Range`.
+- Verify each sidebar filter shows a session count that changes as sessions are added or removed.
+- Switch between `Today`, `Yesterday`, `Last 7 Days`, `Last 30 Days`, and `All Sessions` and confirm the session list updates without UI lag.
+- Set a custom start date and end date and confirm only sessions in that range are listed.
+- Enter a search term that matches transcript text and verify the list narrows to matching sessions.
+- Enter a search term that matches extracted issue summary text and verify the list narrows to matching sessions.
+- Change sorting to `Oldest First` and confirm the list order reverses correctly.
+- Select a session from the list and verify the detail pane updates in place without opening a separate popup.
+- Verify the detail pane keeps access to raw transcript, markers, screenshots, extracted issues, and export actions.
+- Verify an empty state appears for no sessions yet, no sessions in a filter, no sessions in a custom date range, and no search results.
+
+## Marker And Screenshot Workflow
+
+- Insert a marker during recording and verify it appears in the `Markers` tab with the correct time.
+- Capture a screenshot during recording and verify it appears in the `Screenshots` tab.
+- If the screenshot is near a marker, verify the screenshot shows a linked marker when practical.
+- Open a captured screenshot from the review window and verify Finder reveals the file.
+- Export a session bundle and verify `transcript.txt`, `transcript.md`, `summary.md`, and the `screenshots` folder are present.
+
+## Session Deletion
+
+- Select a saved session and delete it from the library toolbar.
+- Verify a confirmation dialog appears before permanent deletion.
+- Confirm the deleted session disappears from the list immediately after confirmation.
+- Verify sidebar counts update after deletion.
+- Verify the detail pane switches to the next available session or an empty state.
+- Delete a session from the row context menu and verify the same behavior.
+- Delete a session that contains screenshots and verify the app warns that local screenshots will also be removed.
+- Verify exported files outside BugNarrator remain untouched after deleting the session.
+
+## Issue Extraction Workflow
+
+- Open a completed session and run `Extract Issues`.
+- Verify the `Extracted Issues` tab shows a summary, guidance note, and categorized draft issues.
+- Verify each issue preserves transcript evidence and timestamp context when available.
+- Edit an extracted issue title, summary, or category and confirm the change persists when you switch away and back.
+- Select and deselect issues for export and verify the selection state persists.
+- Enable automatic issue extraction in Settings and confirm a later session runs extraction automatically after transcription.
+
+## GitHub Export
+
+- Configure a GitHub token, repository owner, and repository name in Settings.
+- Verify GitHub export buttons stay disabled until configuration is complete.
+- Export one selected issue to GitHub and confirm a new issue appears in the target repository.
+- Export multiple selected issues and confirm each selected issue becomes a separate GitHub issue.
+- Verify the GitHub issue body contains transcript evidence and timestamp references.
+- Use a bad token or repository name and verify BugNarrator shows a clear export error.
+- Force one issue export to succeed and a later one to fail, then verify BugNarrator reports partial success instead of a generic failure.
+
+## Jira Export
+
+- Configure Jira Cloud URL, email, API token, project key, and issue type in Settings.
+- Verify Jira export buttons stay disabled until configuration is complete.
+- Export one selected issue to Jira and confirm a new issue appears in the configured project.
+- Export multiple selected issues and confirm each selected issue becomes a separate Jira issue.
+- Verify the Jira issue description contains transcript evidence and timestamp references.
+- Use a bad token, bad project key, or invalid issue type and verify BugNarrator shows a clear export error.
+- Force one issue export to succeed and a later one to fail, then verify BugNarrator reports partial success instead of a generic failure.
+
+## Repeated Session Regression
+
+- Complete a full start-record-stop-transcribe cycle with markers and screenshots.
+- Start a second session without restarting the app.
+- Complete a second full cycle and verify the new session appears first in the session library when sorted newest-first.
+- Repeat once more with automatic issue extraction enabled.
+- Verify the app never gets stuck in `Recording`, `Transcribing`, or export-in-progress state.
+
+## Failure Cases
+
+- Remove the OpenAI API key and attempt to start a session.
+  Expected: a clear missing-key error is shown and Settings opens.
+- Start recording, remove the OpenAI API key from Settings, then stop the session.
+  Expected: the app fails gracefully, explains that the key is missing, and remains usable for the next session.
+- Deny microphone permission and attempt to start a session.
+  Expected: recording does not start and the error explains how to re-enable access in System Settings.
+- Capture a screenshot without Screen Recording permission.
+  Expected: recording continues and BugNarrator shows a screenshot-specific error.
+- Delete or move a saved screenshot file outside the app, then open it from the session detail view.
+  Expected: BugNarrator explains that the local screenshot file is no longer available instead of failing silently.
+- Disconnect networking or force a timeout during transcription.
+  Expected: transcription ends in a clear timeout or API error state and the app returns to a usable state.
+- Use an invalid OpenAI API key.
+  Expected: transcription or issue extraction ends in a clear invalid-key error and Settings opens.
+- Cancel an active recording.
+  Expected: discard confirmation appears first, then the session returns to `Idle` with no stale timer.
+
+## Persistence And Cleanup
+
+- Create several sessions, quit the app, relaunch, and verify the session library reloads correctly.
+- If you can simulate a corrupted session-history file, verify the app still recovers from the backup copy instead of showing an empty library.
+- Delete a session with screenshots and verify the managed screenshot folder is removed.
+- Confirm deleting one session does not remove unrelated files or folders outside BugNarrator's managed session-assets directory.
+
+## Settings Regression
+
+- Change auto-copy, auto-save, and auto-extract toggles and verify the next session follows the new values.
+- Change each hotkey and verify the new shortcut is registered.
+- While recording, verify secret fields are disabled.
+- Enable Debug Mode and confirm temporary audio files are retained after a completed or cancelled session.
+- Disable Debug Mode and confirm temporary audio files are cleaned up after a completed or cancelled session.

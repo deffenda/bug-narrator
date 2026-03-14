@@ -1,0 +1,275 @@
+import Foundation
+import XCTest
+@testable import BugNarrator
+
+final class SessionLibraryTests: XCTestCase {
+    private let referenceDate = ISO8601DateFormatter().date(from: "2026-03-14T12:00:00Z")!
+
+    func testDateBucketFilteringReturnsExpectedSessions() {
+        let calendar = makeCalendar()
+        let sessions = makeDatedSessions()
+        let dateRange = SessionLibraryDateRange(
+            startDate: referenceDate.addingTimeInterval(-7 * 24 * 60 * 60),
+            endDate: referenceDate
+        )
+
+        let todaySessions = SessionLibrary.filteredSessions(
+            from: sessions,
+            query: SessionLibraryQuery(filter: .today, customDateRange: dateRange),
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+        let yesterdaySessions = SessionLibrary.filteredSessions(
+            from: sessions,
+            query: SessionLibraryQuery(filter: .yesterday, customDateRange: dateRange),
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+        let last7DaysSessions = SessionLibrary.filteredSessions(
+            from: sessions,
+            query: SessionLibraryQuery(filter: .last7Days, customDateRange: dateRange),
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+        let last30DaysSessions = SessionLibrary.filteredSessions(
+            from: sessions,
+            query: SessionLibraryQuery(filter: .last30Days, customDateRange: dateRange),
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+
+        XCTAssertEqual(todaySessions.map(\.transcript), ["Today transcript"])
+        XCTAssertEqual(yesterdaySessions.map(\.transcript), ["Yesterday transcript"])
+        XCTAssertEqual(last7DaysSessions.map(\.transcript), ["Today transcript", "Yesterday transcript", "Five days ago transcript"])
+        XCTAssertEqual(last30DaysSessions.map(\.transcript), ["Today transcript", "Yesterday transcript", "Five days ago transcript", "Twenty days ago transcript"])
+    }
+
+    func testCustomDateRangeFilteringAndSearchWorkTogether() {
+        let calendar = makeCalendar()
+        let sessionInRange = makeSession(
+            transcript: "Tooltip jumps under cursor.",
+            createdAt: ISO8601DateFormatter().date(from: "2026-02-22T14:00:00Z")!,
+            summary: "One UX issue around the checkout tooltip."
+        )
+        let sessionOutOfRange = makeSession(
+            transcript: "Sidebar focus disappears.",
+            createdAt: ISO8601DateFormatter().date(from: "2026-01-05T14:00:00Z")!,
+            summary: "Focus bug."
+        )
+        let query = SessionLibraryQuery(
+            filter: .customRange,
+            customDateRange: SessionLibraryDateRange(
+                startDate: ISO8601DateFormatter().date(from: "2026-02-20T00:00:00Z")!,
+                endDate: ISO8601DateFormatter().date(from: "2026-02-28T23:59:59Z")!
+            ),
+            searchText: "tooltip",
+            sortOrder: .newestFirst
+        )
+
+        let filteredSessions = SessionLibrary.filteredSessions(
+            from: [sessionOutOfRange, sessionInRange],
+            query: query,
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+
+        XCTAssertEqual(filteredSessions, [sessionInRange])
+    }
+
+    func testSearchMatchesTitleTranscriptAndSummary() {
+        let calendar = makeCalendar()
+        let titleMatch = makeSession(
+            transcript: "Checkout regression in payment modal. Plain transcript.",
+            createdAt: referenceDate,
+            summary: ""
+        )
+        let transcriptMatch = makeSession(
+            transcript: "General review. Tooltip jumps under cursor during hover.",
+            createdAt: referenceDate.addingTimeInterval(-60),
+            summary: ""
+        )
+        let summaryMatch = makeSession(
+            transcript: "Plain transcript",
+            createdAt: referenceDate.addingTimeInterval(-120),
+            summary: "The summary mentions tooltip behavior."
+        )
+
+        let filteredSessions = SessionLibrary.filteredSessions(
+            from: [titleMatch, transcriptMatch, summaryMatch],
+            query: SessionLibraryQuery(
+                filter: .allSessions,
+                customDateRange: SessionLibraryDateRange(startDate: referenceDate, endDate: referenceDate),
+                searchText: "tooltip",
+                sortOrder: .newestFirst
+            ),
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+
+        XCTAssertEqual(filteredSessions, [transcriptMatch, summaryMatch])
+
+        let titleFilteredSessions = SessionLibrary.filteredSessions(
+            from: [titleMatch, transcriptMatch, summaryMatch],
+            query: SessionLibraryQuery(
+                filter: .allSessions,
+                customDateRange: SessionLibraryDateRange(startDate: referenceDate, endDate: referenceDate),
+                searchText: "checkout",
+                sortOrder: .newestFirst
+            ),
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+
+        XCTAssertEqual(titleFilteredSessions, [titleMatch])
+    }
+
+    func testSortOrderCanSwitchToOldestFirst() {
+        let calendar = makeCalendar()
+        let sessions = makeDatedSessions()
+
+        let filteredSessions = SessionLibrary.filteredSessions(
+            from: sessions,
+            query: SessionLibraryQuery(
+                filter: .last30Days,
+                customDateRange: SessionLibraryDateRange(startDate: referenceDate, endDate: referenceDate),
+                sortOrder: .oldestFirst
+            ),
+            calendar: calendar,
+            referenceDate: referenceDate
+        )
+
+        XCTAssertEqual(
+            filteredSessions.map(\.transcript),
+            ["Twenty days ago transcript", "Five days ago transcript", "Yesterday transcript", "Today transcript"]
+        )
+    }
+
+    func testFilterCountsReflectUnderlyingSessions() {
+        let calendar = makeCalendar()
+        let sessions = makeDatedSessions()
+        let customDateRange = SessionLibraryDateRange(
+            startDate: ISO8601DateFormatter().date(from: "2026-02-20T00:00:00Z")!,
+            endDate: ISO8601DateFormatter().date(from: "2026-02-28T23:59:59Z")!
+        )
+
+        XCTAssertEqual(SessionLibrary.count(for: .today, in: sessions, customDateRange: customDateRange, calendar: calendar, referenceDate: referenceDate), 1)
+        XCTAssertEqual(SessionLibrary.count(for: .yesterday, in: sessions, customDateRange: customDateRange, calendar: calendar, referenceDate: referenceDate), 1)
+        XCTAssertEqual(SessionLibrary.count(for: .last7Days, in: sessions, customDateRange: customDateRange, calendar: calendar, referenceDate: referenceDate), 3)
+        XCTAssertEqual(SessionLibrary.count(for: .last30Days, in: sessions, customDateRange: customDateRange, calendar: calendar, referenceDate: referenceDate), 4)
+        XCTAssertEqual(SessionLibrary.count(for: .allSessions, in: sessions, customDateRange: customDateRange, calendar: calendar, referenceDate: referenceDate), 5)
+        XCTAssertEqual(SessionLibrary.count(for: .customRange, in: sessions, customDateRange: customDateRange, calendar: calendar, referenceDate: referenceDate), 1)
+    }
+
+    func testEmptyStateCoversNoSessionsNoResultsAndNoFilterMatches() {
+        let emptyQuery = SessionLibraryQuery(
+            filter: .allSessions,
+            customDateRange: SessionLibraryDateRange(startDate: referenceDate, endDate: referenceDate)
+        )
+
+        XCTAssertEqual(
+            SessionLibrary.emptyState(allSessions: [], filteredSessions: [], query: emptyQuery),
+            .noSessionsYet
+        )
+
+        let sessions = [
+            makeSession(
+                transcript: "Transcript",
+                createdAt: ISO8601DateFormatter().date(from: "2026-01-05T14:00:00Z")!,
+                summary: ""
+            )
+        ]
+
+        XCTAssertEqual(
+            SessionLibrary.emptyState(
+                allSessions: sessions,
+                filteredSessions: [],
+                query: SessionLibraryQuery(
+                    filter: .today,
+                    customDateRange: SessionLibraryDateRange(startDate: referenceDate, endDate: referenceDate)
+                )
+            ),
+            .noSessionsInFilter(.today)
+        )
+
+        XCTAssertEqual(
+            SessionLibrary.emptyState(
+                allSessions: sessions,
+                filteredSessions: [],
+                query: SessionLibraryQuery(
+                    filter: .customRange,
+                    customDateRange: SessionLibraryDateRange(
+                        startDate: ISO8601DateFormatter().date(from: "2026-02-20T00:00:00Z")!,
+                        endDate: ISO8601DateFormatter().date(from: "2026-02-28T23:59:59Z")!
+                    )
+                )
+            ),
+            .noSessionsInCustomRange
+        )
+
+        XCTAssertEqual(
+            SessionLibrary.emptyState(
+                allSessions: sessions,
+                filteredSessions: [],
+                query: SessionLibraryQuery(
+                    filter: .allSessions,
+                    customDateRange: SessionLibraryDateRange(startDate: referenceDate, endDate: referenceDate),
+                    searchText: "tooltip"
+                )
+            ),
+            .noSearchResults
+        )
+    }
+
+    private func makeCalendar() -> Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return calendar
+    }
+
+    private func makeDatedSessions() -> [TranscriptSession] {
+        [
+            makeSession(
+                transcript: "Today transcript",
+                createdAt: ISO8601DateFormatter().date(from: "2026-03-14T09:00:00Z")!,
+                summary: ""
+            ),
+            makeSession(
+                transcript: "Yesterday transcript",
+                createdAt: ISO8601DateFormatter().date(from: "2026-03-13T09:00:00Z")!,
+                summary: ""
+            ),
+            makeSession(
+                transcript: "Five days ago transcript",
+                createdAt: ISO8601DateFormatter().date(from: "2026-03-09T09:00:00Z")!,
+                summary: ""
+            ),
+            makeSession(
+                transcript: "Twenty days ago transcript",
+                createdAt: ISO8601DateFormatter().date(from: "2026-02-22T09:00:00Z")!,
+                summary: ""
+            ),
+            makeSession(
+                transcript: "Older transcript",
+                createdAt: ISO8601DateFormatter().date(from: "2026-01-20T09:00:00Z")!,
+                summary: ""
+            )
+        ]
+    }
+
+    private func makeSession(
+        transcript: String,
+        createdAt: Date,
+        summary: String
+    ) -> TranscriptSession {
+        TranscriptSession(
+            createdAt: createdAt,
+            transcript: transcript,
+            duration: 45,
+            model: "whisper-1",
+            languageHint: nil,
+            prompt: nil,
+            issueExtraction: summary.isEmpty ? nil : IssueExtractionResult(summary: summary, issues: []),
+            updatedAt: createdAt
+        )
+    }
+}
