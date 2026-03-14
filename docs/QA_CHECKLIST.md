@@ -2,6 +2,9 @@
 
 ## Setup
 
+- Build the DMG with `./scripts/build_dmg.sh`.
+- Open the generated DMG and confirm it shows `BugNarrator.app` plus the `Applications` shortcut.
+- Drag `BugNarrator.app` to `Applications` and launch that installed copy once.
 - Build and run `BugNarrator` from Xcode.
 - Confirm the menu bar item appears after launch.
 - Confirm the menu bar explains that the app requires the user's own OpenAI API key.
@@ -27,6 +30,14 @@
 - Verify the changelog window opens and displays the bundled `CHANGELOG.md` content.
 - Verify `Check for Updates` opens the GitHub releases page.
 - Confirm there are no dead or mislabeled menu items in the project-info section.
+
+## Download And Install Experience
+
+- Verify the README `Download` section is easy to find near the top.
+- Verify the README links to the release page and the expected DMG download path.
+- Verify the README `Support Development` section is visible near the top.
+- If testing a published release, confirm the DMG download link resolves to the expected artifact.
+- Verify the install steps in `README.md` and `docs/UserGuide.md` match the actual DMG flow.
 
 ## Core Workflow
 
