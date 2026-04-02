@@ -1,0 +1,17 @@
+{
+  "current_phase": {
+    "id": "RR-002",
+    "name": "Windows Runtime Validation And Hardening",
+    "status": "blocked"
+  },
+  "continue_from": "Repo-local validation, artifact tracking, and agent handoff scaffolding are now present on main. Continue from RR-002-T4 without inventing new UI work: the remaining honest blocker is real Windows runtime validation.",
+  "blocked_items": [
+    "RR-002-T4 still requires a real Windows machine or VM to validate tray behavior, recording lifecycle, screenshot selection, and global hotkeys.",
+    "Public release publishing is still blocked until manual QA, signing/notarization inputs, and maintainer release approval are available."
+  ],
+  "next_actions": [
+    "Run windows/docs/WINDOWS_VALIDATION_CHECKLIST.md on a real Windows machine or VM and update state/tasks.json, state/risks.json, and docs/roadmap/state.json with the evidence.",
+    "If a release is needed, rerun ./scripts/validate.sh, build a signed/notarized DMG, and publish only after the release gates in docs/release/release-process.md are satisfied.",
+    "For future repo work, start from ./bootstrap.sh plus the tracked state files instead of treating chat history as the handoff source."
+  ]
+}

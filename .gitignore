@@ -29,3 +29,9 @@ infra/terraform/.terraform.lock.hcl
 site/node_modules/
 site/.docusaurus/
 site/build/
+
+# Long-running repo local artifacts
+state/env.json
+state/repo.json
+runs/
+logs/

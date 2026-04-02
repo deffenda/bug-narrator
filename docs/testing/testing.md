@@ -13,11 +13,14 @@ Detailed companion docs:
 Current macOS validation baseline:
 
 ```bash
+./scripts/validate.sh
 ./scripts/release_smoke_test.sh
 ./scripts/accessibility_regression_check.sh
 xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Debug CODE_SIGNING_ALLOWED=NO test
 xcodebuild -project BugNarrator.xcodeproj -scheme BugNarrator -configuration Release CODE_SIGNING_ALLOWED=NO build
 ```
+
+`./scripts/validate.sh` is the repo-local wrapper used for closeout and handoff. It runs the available macOS, docs-site, and targeted security checks from this workspace, then records the latest results in `state/artifacts.json`.
 
 Current Windows workspace validation baseline on Windows:
 

@@ -1,0 +1,11 @@
+{
+  "last_validation": {
+    "timestamp": null,
+    "lint": "NOT RUN",
+    "unit_tests": "NOT RUN",
+    "integration_tests": "NOT RUN",
+    "build": "NOT RUN",
+    "security_checks": "NOT RUN"
+  },
+  "evidence": []
+}
