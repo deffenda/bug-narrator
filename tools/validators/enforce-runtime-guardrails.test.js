@@ -379,3 +379,25 @@ test("validator fails when code changes skip canonical state updates", () => {
     /Work progressed without updating the canonical state files\./
   );
 });
+
+test("validator allows code changes when canonical state files are updated", () => {
+  const fixtureRoot = buildFixtureRoot();
+
+  writeText(path.join(fixtureRoot, "src", "app.js"), "module.exports = 2;\n");
+  writeFixtureSession(fixtureRoot, [
+    {
+      id: "OPS-TEST-E1",
+      date: "2026-04-04",
+      phase: "OPS-TEST",
+      scope: "fixture-validation",
+      type: "validation",
+      command: "node tools/validators/enforce-runtime-guardrails.js",
+      result: "PASS",
+      summary: "Updated state after code changes."
+    }
+  ]);
+
+  const result = runValidator(fixtureRoot);
+  assert.equal(result.status, 0);
+  assert.match(result.output, /^PASS/m);
+});
