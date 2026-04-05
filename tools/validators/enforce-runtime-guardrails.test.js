@@ -344,6 +344,29 @@ test("validator requires risk_ids for NOT RUN evidence outside docs phases", () 
   );
 });
 
+test("validator allows NOT RUN evidence with risk_ids outside docs phases", () => {
+  const fixtureRoot = buildFixtureRoot();
+
+  writeText(path.join(fixtureRoot, "src", "app.js"), "module.exports = 2;\n");
+  writeFixtureSession(fixtureRoot, [
+    {
+      id: "OPS-TEST-E1",
+      date: "2026-04-04",
+      phase: "OPS-TEST",
+      scope: "fixture-validation",
+      type: "validation",
+      command: "node tools/validators/enforce-runtime-guardrails.js",
+      result: "NOT RUN",
+      risk_ids: ["RISK-TEST-001"],
+      summary: "Known deferred execution with mapped risk."
+    }
+  ]);
+
+  const result = runValidator(fixtureRoot);
+  assert.equal(result.status, 0);
+  assert.match(result.output, /^PASS/m);
+});
+
 test("validator fails when code changes skip canonical state updates", () => {
   const fixtureRoot = buildFixtureRoot();
 
