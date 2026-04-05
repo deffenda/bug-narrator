@@ -255,7 +255,7 @@
       "description": "CI does not yet prove full interactive Windows runtime behavior or the signed release path.",
       "severity": "medium",
       "impact": "Build confidence is improving, but key Windows and release behaviors can still regress outside maintainer-run workflows.",
-      "mitigation": "Track and improve in RR-002 and OPP-002. RR-002 now adds phase-branch CI coverage, explicit Windows test-project execution, packaged zip validation, packaged-app smoke execution, packaged-file hash parity checks, and uploaded validation artifacts, but signed release validation and interactive runtime behavior are still unresolved.",
+      "mitigation": "Track and improve in RR-002 and OPP-002. RR-002 now adds phase-branch CI coverage, explicit Windows test execution, packaged zip validation, packaged-app smoke execution, packaged-file hash parity checks, and uploaded validation artifacts, but signed release validation and interactive runtime behavior are still unresolved.",
       "affected_components": [
         "github-workflows",
         "windows",
