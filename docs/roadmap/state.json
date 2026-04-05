@@ -59,6 +59,12 @@
       "name": "Dependency Alert Remediation",
       "completed_on": "2026-04-05",
       "summary": "Remediated both default-branch Dependabot alert sets, replaced the broken local docs-site npm path with a pinned Node 22 wrapper, added runtime-guardrails regression coverage for the FAIL, NOT RUN, and missing-state-update rules, and verified that the default branch returned no open Dependabot alerts after PR #6 and PR #8 merged."
+    },
+    {
+      "id": "OPS-010",
+      "name": "Retry-Needed Session Filter",
+      "completed_on": "2026-04-05",
+      "summary": "Added a dedicated Retry Needed session-library filter, routed the recovery banner into that filtered view, and covered the new filter, count, and empty-state behavior with SessionLibrary regression tests."
     }
   ],
   "upcoming_phases": [
@@ -115,19 +121,6 @@
         "promote the internal release-summary seed into a maintainer-reviewed release note draft flow",
         "decide how much roadmap state belongs in public release notes",
         "attach release-summary generation to the release checklist"
-      ]
-    },
-    {
-      "id": "OPS-010",
-      "name": "Retry-Needed Session Filter",
-      "priority": "low",
-      "depends_on": [
-        "OPS-003"
-      ],
-      "scope": [
-        "add a dedicated retry-needed session-library filter or saved view",
-        "keep recovery discovery visible in larger histories",
-        "consider explicit retry-needed counts in date-filter metadata"
       ]
     }
   ],
@@ -496,15 +489,9 @@
       "remediation": "Executed OPS-007 Release Summary Automation Seed."
     }
   ],
-  "current_phase": {
-    "id": "RR-002",
-    "name": "Windows Runtime Validation And Hardening",
-    "status": "blocked",
-    "started_on": "2026-03-24",
-    "summary": "RR-002 is blocked on a real Windows validation pass. The most recent completed work closed OPS-012 after PR #8 merged the remaining lodash remediation plus validator regression coverage into main and GitHub cleared the default-branch Dependabot alerts; the remaining execution blocker is RR-002-T4: run validation on a real Windows machine or VM."
-  },
+  "current_phase": "RR-002",
   "current_phase_branch": "phase/bootstrap",
-  "last_updated": "2026-04-05",
+  "last_updated": "2026-04-05T11:52:00.230Z",
   "tasks": {
     "active": [
       "RR-002-T4"
@@ -512,6 +499,8 @@
     "completed": [
       "OPS-011-T1",
       "OPS-011-T3",
+      "BOOTSTRAP-T1",
+      "BOOTSTRAP-T2",
       "RR-002-T1",
       "RR-002-T2",
       "RR-002-T3",
@@ -520,8 +509,6 @@
       "RR-002-T7",
       "RR-002-T8",
       "RR-002-T9",
-      "BOOTSTRAP-T1",
-      "BOOTSTRAP-T2",
       "OPS-011-T4",
       "OPS-011-T2",
       "OPS-012-T1",
@@ -529,7 +516,9 @@
       "OPS-012-T3",
       "OPS-012-T4",
       "OPS-012-T5",
-      "OPS-012-T6"
+      "OPS-012-T6",
+      "OPS-010-T1",
+      "BOOTSTRAP-T3"
     ]
   },
   "decisions": [
@@ -672,6 +661,14 @@
     {
       "date": "2026-04-05",
       "summary": "Merged PR #8 after hosted CI run 23995836693 passed and then confirmed the default-branch Dependabot alert API returned no open alerts, closing OPS-012 and leaving RR-002 as the only active blocked phase."
+    },
+    {
+      "date": "2026-04-05",
+      "summary": "Because RR-002 is still blocked on real Windows validation, completed OPS-010 in the macOS workspace by adding a dedicated Retry Needed session-library filter, routing the recovery banner into that filtered view, and revalidating the library behavior with focused SessionLibraryTests plus a full app build."
+    },
+    {
+      "date": "2026-04-05",
+      "summary": "Adopted the latest enterprise-ai-standards contract by switching the repo to ai.config.json plus scripts/validate.sh, flattening the canonical tasks, risks, and decisions ledgers, and adding artifacts.json and handoff.json with file-backed evidence while keeping RR-002 blocked on real Windows validation."
     }
   ],
   "version": "1.0.22",
@@ -718,5 +715,16 @@
       "date": "2026-03-16",
       "notes": "Manual promotion through the signed/notarized GitHub release process."
     }
-  ]
+  ],
+  "current_phase_detail": {
+    "id": "RR-002",
+    "name": "Windows Runtime Validation And Hardening",
+    "status": "blocked",
+    "started_on": "2026-03-24",
+    "summary": "RR-002 is blocked on a real Windows validation pass. The latest repo-execution work reconciled prompts, validator entrypoints, and canonical state to the latest enterprise-ai-standards contract while preserving the existing roadmap history; the remaining execution blocker is RR-002-T4: run validation on a real Windows machine or VM."
+  },
+  "current_phase_name": "Windows Runtime Validation And Hardening",
+  "phase_type": "build",
+  "phase_status": "blocked",
+  "active_task_id": "RR-002-T4"
 }
