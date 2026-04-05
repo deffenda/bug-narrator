@@ -1,5 +1,7 @@
 # Implementation Notes
 
+This file records the local Codex implementation pass before GitHub review and any follow-up fixes after `review_failed_fix_required`.
+
 ## Task
 
 T1
@@ -23,3 +25,4 @@ T1
 ## Remaining issues
 
 - Windows validation pass has not been executed yet
+- GitHub PR review has not started yet

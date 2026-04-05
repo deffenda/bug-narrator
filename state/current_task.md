@@ -15,3 +15,4 @@ Title: Run the `RR-002-T4` real Windows validation pass and record the result
 - No replanning
 - No new subsystem creation
 - No broad refactor
+- After local validation passes, move the controller to `ready_for_review`
