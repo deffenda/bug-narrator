@@ -501,7 +501,7 @@
     "name": "Windows Runtime Validation And Hardening",
     "status": "blocked",
     "started_on": "2026-03-24",
-    "summary": "RR-002 is blocked on real Windows desktop runtime validation. OPS-012 is now complete after PR #8 merged the remaining lodash remediation plus validator regression coverage into main and GitHub cleared the default-branch Dependabot alerts; the remaining active execution blocker is still RR-002-T4 on real Windows hardware or a Windows VM."
+    "summary": "RR-002 is blocked on real Windows desktop runtime validation. The most recent completed work closed OPS-012 after PR #8 merged the remaining lodash remediation plus validator regression coverage into main and GitHub cleared the default-branch Dependabot alerts; the remaining active execution blocker is still RR-002-T4 on real Windows hardware or a Windows VM."
   },
   "current_phase_branch": "phase/bootstrap",
   "last_updated": "2026-04-05",
