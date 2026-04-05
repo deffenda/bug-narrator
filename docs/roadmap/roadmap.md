@@ -117,6 +117,17 @@ Scope completed:
 - wired the generated summary into the release workflow as a run summary and artifact
 - documented the summary as a maintainer aid rather than a public release-note replacement
 
+### OPS-012 Dependency Alert Remediation
+
+Completed on `2026-04-05`
+
+Scope completed:
+
+- remediated both default-branch Dependabot alert sets across the docs-site dependency graph
+- replaced the broken local docs-site npm 11 / Node 25 path with a repo-local Node 22 wrapper
+- added direct runtime-guardrails regression tests for the FAIL, NOT RUN, and missing-state-update rules
+- verified PR `#8` merged to `main` and the default-branch Dependabot alert API returned no open alerts
+
 ## Risk Remediation Phases
 
 ### RR-002 Windows Runtime Validation And Hardening
@@ -146,20 +157,6 @@ Priority: Low
 Grouped risks:
 
 - a real VoiceOver-driven runtime pass and docs-site accessibility validation still need to be run once the site is published and release-candidate UI is exercised live
-
-### OPS-012 Dependency Alert Remediation
-
-Priority: Medium
-
-Grouped risks:
-
-- none currently open; the two remaining `lodash` alerts were cleared on `main` on April 5, 2026 after PR #8 merged
-
-Current execution slice:
-
-- patch the docs-site dependency tree with a `lodash` `4.18.1` override after the original `serialize-javascript`, `brace-expansion`, and Express `path-to-regexp` remediation cleared the first alert set on `main`
-- validate the patched dependency graph with `./scripts/site_npm.sh ls`, a production Docusaurus build, direct runtime-guardrails regression tests, and the passing hosted CI run `23995836693` on `phase/bootstrap`
-- completed on April 5, 2026 when PR #8 merged to `main` and the default-branch Dependabot alert API returned no open alerts
 
 ## Upcoming Feature / Opportunity Phases
 

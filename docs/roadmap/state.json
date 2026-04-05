@@ -53,6 +53,12 @@
       "name": "Release Summary Automation Seed",
       "completed_on": "2026-03-23",
       "summary": "Added an internal release-summary generator based on the changelog and roadmap state, surfaced it in the release workflow as a run artifact and step summary, and documented it as a maintainer aid rather than a public release-note replacement."
+    },
+    {
+      "id": "OPS-012",
+      "name": "Dependency Alert Remediation",
+      "completed_on": "2026-04-05",
+      "summary": "Remediated both default-branch Dependabot alert sets, replaced the broken local docs-site npm path with a pinned Node 22 wrapper, added runtime-guardrails regression coverage for the branch-blocking evidence rules, and verified that the default branch returned no open Dependabot alerts after PR #8 merged."
     }
   ],
   "upcoming_phases": [
@@ -144,15 +150,6 @@
         "RISK-ACC-002"
       ],
       "scope": "Run a real VoiceOver-driven validation pass on the release-candidate macOS UI and validate docs-site accessibility once the Docusaurus site is published."
-    },
-    {
-      "id": "OPS-012",
-      "name": "Dependency Alert Remediation",
-      "priority": "medium",
-      "grouped_risks": [
-        "RISK-SEC-002"
-      ],
-      "scope": "Review and remediate the open Dependabot alerts on the default branch, validate the patched dependency graph on the tracked branch, and promote the remediation so GitHub clears the default-branch alerts."
     }
   ],
   "opportunities": [

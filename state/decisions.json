@@ -110,6 +110,11 @@
       "date": "2026-04-05",
       "phase": "OPS-012",
       "summary": "Promoted the remaining lodash remediation plus validator regression coverage to main through PR #8 after hosted CI run 23995836693 passed, then closed RISK-SEC-002 when the default-branch Dependabot alert API returned no open alerts."
+    },
+    {
+      "date": "2026-04-05",
+      "phase": "OPS-012",
+      "summary": "Moved OPS-012 out of the active risk-remediation list and into the completed-phase history so the roadmap now reflects that the dependency-alert phase is finished rather than still queued as future remediation."
     }
   ]
 }
