@@ -401,3 +401,11 @@ test("validator allows code changes when canonical state files are updated", () 
   assert.equal(result.status, 0);
   assert.match(result.output, /^PASS/m);
 });
+
+test("validator passes for an unchanged clean fixture", () => {
+  const fixtureRoot = buildFixtureRoot();
+
+  const result = runValidator(fixtureRoot);
+  assert.equal(result.status, 0);
+  assert.match(result.output, /^PASS/m);
+});
