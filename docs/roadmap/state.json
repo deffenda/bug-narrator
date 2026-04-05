@@ -252,7 +252,7 @@
     },
     {
       "id": "RISK-WIN-002",
-      "description": "CI does not yet prove full Windows runtime behavior or the signed release automation path.",
+      "description": "CI does not yet prove full Windows runtime behavior or the signed release path.",
       "severity": "medium",
       "impact": "Build confidence is improving, but key Windows and release-time behaviors can still regress outside local maintainer workflows.",
       "mitigation": "Track and improve in RR-002 and OPP-002. RR-002 now adds phase-branch CI coverage, explicit Windows test-project execution, packaged zip validation, packaged-app smoke execution, packaged-file hash parity checks, and uploaded validation evidence, but signed release validation and real runtime behavior are still unresolved.",
