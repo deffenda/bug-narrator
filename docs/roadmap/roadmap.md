@@ -136,7 +136,7 @@ Priority: High
 
 Grouped risks:
 
-- WPF tray, recording, and screenshot milestones have not yet been validated on real Windows
+- WPF tray, recording, and screenshot milestones have not yet been validated on a real Windows machine or VM
 - CI and runtime confidence for Windows remain lower than macOS
 
 Current execution slice:
