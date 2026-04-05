@@ -238,7 +238,7 @@
     },
     {
       "id": "RISK-WIN-001",
-      "description": "Windows tray shell, recording, and screenshot workflows have been scaffolded but not yet validated on real Windows hardware.",
+      "description": "Windows tray shell, recording, and screenshot workflows have been scaffolded but not yet validated on a real Windows machine or VM.",
       "severity": "high",
       "impact": "The Windows workspace may compile conceptually while failing in real tray, permission, or capture behavior.",
       "mitigation": "Track and fix in RR-002. This phase now improves CI and packaged artifact validation, but real Windows desktop validation is still required before the risk can be closed.",
