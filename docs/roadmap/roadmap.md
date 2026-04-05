@@ -126,7 +126,7 @@ Scope completed:
 - remediated both default-branch Dependabot alert sets across the docs-site dependency graph
 - replaced the broken local docs-site npm 11 / Node 25 path with a repo-local Node 22 wrapper
 - added direct runtime-guardrails regression tests for the FAIL, NOT RUN, and missing-state-update rules
-- verified PR `#8` merged to `main` and the default-branch Dependabot alert API returned no open alerts
+- verified PR `#6` and PR `#8` merged to `main` and the default-branch Dependabot alert API returned no open alerts
 
 ## Risk Remediation Phases
 

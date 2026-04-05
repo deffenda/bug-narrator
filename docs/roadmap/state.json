@@ -58,7 +58,7 @@
       "id": "OPS-012",
       "name": "Dependency Alert Remediation",
       "completed_on": "2026-04-05",
-      "summary": "Remediated both default-branch Dependabot alert sets, replaced the broken local docs-site npm path with a pinned Node 22 wrapper, added runtime-guardrails regression coverage for the FAIL, NOT RUN, and missing-state-update rules, and verified that the default branch returned no open Dependabot alerts after PR #8 merged."
+      "summary": "Remediated both default-branch Dependabot alert sets, replaced the broken local docs-site npm path with a pinned Node 22 wrapper, added runtime-guardrails regression coverage for the FAIL, NOT RUN, and missing-state-update rules, and verified that the default branch returned no open Dependabot alerts after PR #6 and PR #8 merged."
     }
   ],
   "upcoming_phases": [
