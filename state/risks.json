@@ -49,6 +49,13 @@
       "status": "resolved",
       "assigned_phase": "OPS-012",
       "note": "Resolved by merging PR #6 into main at merge commit dc7a66aa7b2fc42a0b05edddec6169c0f6a88135 and confirming the original four default-branch Dependabot alerts were no longer open in the GitHub alert API response on 2026-04-04."
+    },
+    {
+      "id": "RISK-SEC-002",
+      "severity": "medium",
+      "status": "resolved",
+      "assigned_phase": "OPS-012",
+      "note": "Resolved by merging PR #8 into main at merge commit fa6f96798796f1d6cc42c4d7c05482abd4f6393c after hosted CI run 23995836693 passed on commit 68e3eb2, then confirming the default-branch Dependabot alert API returned no open alerts on 2026-04-05."
     }
   ],
   "unresolved": [
@@ -72,13 +79,6 @@
       "status": "unresolved",
       "assigned_phase": "RR-005",
       "note": "Live VoiceOver and hosted docs-site accessibility validation still remain for a later remediation phase."
-    },
-    {
-      "id": "RISK-SEC-002",
-      "severity": "medium",
-      "status": "unresolved",
-      "assigned_phase": "OPS-012",
-      "note": "After the original four alerts were cleared on main, GitHub still reported two open lodash alerts on the default branch (#6 high, #5 medium). phase/bootstrap now contains the lodash 4.18.1 override, synced phase state, validator regression coverage for the runtime guardrails rules, and a passing hosted CI run 23989366196 on commit 40ddf31; the remaining work is promoting that follow-up remediation to the default branch and confirming the alerts close there."
     }
   ]
 }

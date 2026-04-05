@@ -7,13 +7,6 @@
       "title": "Run tray, recording, screenshot, and hotkey validation on a real Windows machine or VM",
       "status": "pending",
       "blocking_for_phase_completion": true
-    },
-    {
-      "id": "OPS-012-T6",
-      "phase": "OPS-012",
-      "title": "Promote the lodash remediation to the default branch and confirm the remaining Dependabot alerts close there",
-      "status": "pending",
-      "blocking_for_phase_completion": true
     }
   ],
   "completed": [
@@ -129,6 +122,12 @@
       "id": "OPS-012-T5",
       "phase": "OPS-012",
       "title": "Patch the newly surfaced lodash Dependabot alerts on the tracked branch and validate the updated dependency graph locally plus in hosted CI",
+      "status": "completed"
+    },
+    {
+      "id": "OPS-012-T6",
+      "phase": "OPS-012",
+      "title": "Promote the lodash remediation to the default branch and confirm the remaining Dependabot alerts close there",
       "status": "completed"
     }
   ]
