@@ -241,7 +241,7 @@
       "description": "Windows tray shell, recording, and screenshot workflows have been scaffolded but not yet validated on a real Windows machine or VM.",
       "severity": "high",
       "impact": "The Windows workspace may compile conceptually while failing in real tray, permission, or capture behavior.",
-      "mitigation": "Track and fix in RR-002. This phase now improves CI and packaged artifact validation, but real Windows desktop validation is still required before the risk can be closed.",
+      "mitigation": "Track and fix in RR-002. This phase now improves CI and packaged artifact validation, but a real Windows machine or VM validation pass is still required before the risk can be closed.",
       "affected_components": [
         "windows",
         "BugNarrator.Windows",
@@ -501,7 +501,7 @@
     "name": "Windows Runtime Validation And Hardening",
     "status": "blocked",
     "started_on": "2026-03-24",
-    "summary": "RR-002 is blocked on real Windows desktop validation. The most recent completed work closed OPS-012 after PR #8 merged the remaining lodash remediation plus validator regression coverage into main and GitHub cleared the default-branch Dependabot alerts; the remaining active execution blocker is still RR-002-T4 on a real Windows machine or VM."
+    "summary": "RR-002 is blocked on a real Windows machine or VM validation pass. The most recent completed work closed OPS-012 after PR #8 merged the remaining lodash remediation plus validator regression coverage into main and GitHub cleared the default-branch Dependabot alerts; the remaining active execution blocker is still RR-002-T4 on a real Windows machine or VM."
   },
   "current_phase_branch": "phase/bootstrap",
   "last_updated": "2026-04-05",
