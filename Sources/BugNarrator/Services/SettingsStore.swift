@@ -355,7 +355,7 @@ final class SettingsStore: ObservableObject {
     init(
         defaults: UserDefaults = .standard,
         keychainService: KeychainServicing = KeychainService(),
-        launchAtLoginService: any LaunchAtLoginControlling = SystemLaunchAtLoginService(),
+        launchAtLoginService: any LaunchAtLoginControlling,
         legacyDefaultsDomains: [String]? = nil
     ) {
         self.defaults = defaults

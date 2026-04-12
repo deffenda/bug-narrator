@@ -16,7 +16,11 @@ final class DebugBundleExporterTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: defaultsSuiteName) }
 
         let keychainService = MockKeychainService()
-        let settingsStore = SettingsStore(defaults: defaults, keychainService: keychainService)
+        let settingsStore = SettingsStore(
+            defaults: defaults,
+            keychainService: keychainService,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         settingsStore.apiKey = "fixture-openai-key"
         settingsStore.preferredModel = "whisper-1"
         settingsStore.issueExtractionModel = "gpt-4.1-mini"

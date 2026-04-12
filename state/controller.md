@@ -1,7 +1,7 @@
 # Controller State
 
-current_state: ready_for_codex
-state_owner: Claude
+current_state: ready_for_review
+state_owner: Review
 
 ## allowed_transitions
 

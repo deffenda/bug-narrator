@@ -16,7 +16,11 @@ final class SettingsStoreTests: XCTestCase {
         defaults.removePersistentDomain(forName: suiteName)
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
-        let store = SettingsStore(defaults: defaults, keychainService: MockKeychainService())
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: MockKeychainService(),
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(store.startRecordingHotkeyShortcut, .disabled)
         XCTAssertEqual(store.stopRecordingHotkeyShortcut, .disabled)
@@ -117,7 +121,11 @@ final class SettingsStoreTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
         let keychain = MockKeychainService()
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         store.apiKey = "saved-in-keychain"
 
         XCTAssertFalse(defaults.dictionaryRepresentation().keys.contains { $0.localizedCaseInsensitiveContains("apikey") })
@@ -131,7 +139,11 @@ final class SettingsStoreTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
         let keychain = MockKeychainService()
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         store.jiraEmail = "secure@example.com"
 
         XCTAssertNil(defaults.string(forKey: "settings.jiraEmail"))
@@ -151,10 +163,18 @@ final class SettingsStoreTests: XCTestCase {
         let keychain = MockKeychainService()
         keychain.setError = AppError.storageFailure("Keychain unavailable")
 
-        let firstStore = SettingsStore(defaults: defaults, keychainService: keychain)
+        let firstStore = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         firstStore.apiKey = "fallback-key"
 
-        let secondStore = SettingsStore(defaults: defaults, keychainService: keychain)
+        let secondStore = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(firstStore.apiKeyPersistenceState, .sessionOnly)
         XCTAssertEqual(secondStore.apiKey, "")
@@ -166,7 +186,11 @@ final class SettingsStoreTests: XCTestCase {
         defaults.removePersistentDomain(forName: suiteName)
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
-        let store = SettingsStore(defaults: defaults, keychainService: MockKeychainService())
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: MockKeychainService(),
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         store.apiKey = "fixture-openai-key-1234"
 
         XCTAssertEqual(store.maskedAPIKey, "••••••••1234")
@@ -202,6 +226,7 @@ final class SettingsStoreTests: XCTestCase {
         let store = SettingsStore(
             defaults: defaults,
             keychainService: MockKeychainService(),
+            launchAtLoginService: TestingLaunchAtLoginService(),
             legacyDefaultsDomains: [legacyDomainName]
         )
 
@@ -224,7 +249,11 @@ final class SettingsStoreTests: XCTestCase {
         defaults.set("legacy@example.com", forKey: "settings.jiraEmail")
 
         let keychain = MockKeychainService()
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(store.jiraEmail, "legacy@example.com")
         XCTAssertEqual(store.jiraEmailPersistenceState, .keychain)
@@ -241,7 +270,11 @@ final class SettingsStoreTests: XCTestCase {
         defaults.removePersistentDomain(forName: suiteName)
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
-        let store = SettingsStore(defaults: defaults, keychainService: MockKeychainService())
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: MockKeychainService(),
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         let duplicateShortcut = HotkeyShortcut(
             keyCode: 7,
             modifiers: NSEvent.ModifierFlags.command.union(.option).rawValue
@@ -273,7 +306,11 @@ final class SettingsStoreTests: XCTestCase {
             encoder.encode(try XCTUnwrap(HotkeyAction.stopRecording.legacyBuiltInShortcut)),
             forKey: "settings.stopRecordingHotkeyShortcut"
         )
-        let store = SettingsStore(defaults: defaults, keychainService: MockKeychainService())
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: MockKeychainService(),
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(store.startRecordingHotkeyShortcut, .disabled)
         XCTAssertEqual(store.stopRecordingHotkeyShortcut, .disabled)
@@ -296,7 +333,11 @@ final class SettingsStoreTests: XCTestCase {
             forKey: "settings.markerHotkeyShortcut"
         )
 
-        _ = SettingsStore(defaults: defaults, keychainService: MockKeychainService())
+        _ = SettingsStore(
+            defaults: defaults,
+            keychainService: MockKeychainService(),
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertNil(defaults.object(forKey: "settings.markerHotkeyShortcut"))
     }
@@ -310,7 +351,11 @@ final class SettingsStoreTests: XCTestCase {
         let keychain = MockKeychainService()
         keychain.values["SessionMic.OpenAI::openai-api-key"] = "legacy-api-key"
 
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(store.apiKey, "legacy-api-key")
         XCTAssertEqual(
@@ -330,7 +375,11 @@ final class SettingsStoreTests: XCTestCase {
         keychain.values["BugNarrator.OpenAI::openai-api-key"] = "locked-api-key"
         keychain.interactionRequiredKeys = ["BugNarrator.OpenAI::openai-api-key"]
 
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(store.apiKey, "")
         XCTAssertEqual(store.apiKeyPersistenceState, .keychainLocked)
@@ -357,7 +406,11 @@ final class SettingsStoreTests: XCTestCase {
         keychain.values[legacyKey] = "legacy-api-key"
         keychain.interactionRequiredKeys = [legacyKey]
 
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(store.apiKey, "")
         XCTAssertEqual(store.apiKeyPersistenceState, .keychainLocked)
@@ -395,7 +448,11 @@ final class SettingsStoreTests: XCTestCase {
         keychain.values[legacyJiraKey] = "legacy-fixture-jira-token"
         keychain.interactionRequiredKeys = [legacyGitHubKey, legacyJiraKey]
 
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
 
         XCTAssertEqual(store.githubToken, "")
         XCTAssertEqual(store.jiraAPIToken, "")
@@ -442,7 +499,11 @@ final class SettingsStoreTests: XCTestCase {
         defaults.removePersistentDomain(forName: suiteName)
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
-        let store = SettingsStore(defaults: defaults, keychainService: MockKeychainService())
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: MockKeychainService(),
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         store.githubToken = "fixture-github-token-9876"
         store.jiraAPIToken = "fixture-jira-token-4321"
 
@@ -457,7 +518,11 @@ final class SettingsStoreTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
         let keychain = MockKeychainService()
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         store.apiKey = "to-be-removed"
 
         store.removeAPIKey()
@@ -474,7 +539,11 @@ final class SettingsStoreTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
         let keychain = MockKeychainService()
-        let store = SettingsStore(defaults: defaults, keychainService: keychain)
+        let store = SettingsStore(
+            defaults: defaults,
+            keychainService: keychain,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         store.githubToken = "github-remove"
         store.jiraAPIToken = "jira-remove"
 

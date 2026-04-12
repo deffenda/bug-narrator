@@ -448,7 +448,11 @@ struct AppStateHarness {
         defaults.removePersistentDomain(forName: defaultsSuiteName)
 
         let keychainService = MockKeychainService()
-        let settingsStore = SettingsStore(defaults: defaults, keychainService: keychainService)
+        let settingsStore = SettingsStore(
+            defaults: defaults,
+            keychainService: keychainService,
+            launchAtLoginService: TestingLaunchAtLoginService()
+        )
         settingsStore.apiKey = apiKey
         settingsStore.debugMode = debugMode
         settingsStore.autoCopyTranscript = autoCopyTranscript
