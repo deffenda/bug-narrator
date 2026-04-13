@@ -9,7 +9,7 @@ on:
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
-    runs-on: ${{ matrix.language == 'swift' && 'macos-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     permissions:
       security-events: write
       actions: read
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [actions, swift, python, javascript-typescript, csharp]
+        language: [actions, python, javascript-typescript, csharp]
 
     steps:
       - name: Checkout
