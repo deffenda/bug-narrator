@@ -41,3 +41,6 @@ site/build/
 # These are required pipeline files that must be tracked by git
 !state/implementation_notes.md
 !state/validation_report.md
+
+# Risks are private — do not publish to GitHub
+state/risks.json
