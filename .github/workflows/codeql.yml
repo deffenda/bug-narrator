@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
-    runs-on: ${{ matrix.language == 'swift' && 'macos-latest' || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.language == 'swift' && 'macos-latest' || matrix.language == 'csharp' && 'windows-latest' || 'ubuntu-latest' }}
     permissions:
       security-events: write
       actions: read
@@ -31,7 +31,19 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
+      - name: Setup .NET
+        if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build Windows solution
+        if: matrix.language == 'csharp'
+        shell: pwsh
+        run: ./windows/scripts/build-windows.ps1 -Configuration Debug
+
       - name: Autobuild
+        if: matrix.language != 'csharp'
         uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL Analysis
