@@ -42,8 +42,20 @@ jobs:
         shell: pwsh
         run: ./windows/scripts/build-windows.ps1 -Configuration Debug
 
+      - name: Build macOS app
+        if: matrix.language == 'swift'
+        shell: bash
+        run: |
+          xcodebuild \
+            -quiet \
+            -project BugNarrator.xcodeproj \
+            -scheme BugNarrator \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
       - name: Autobuild
-        if: matrix.language != 'csharp'
+        if: matrix.language != 'csharp' && matrix.language != 'swift'
         uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL Analysis
