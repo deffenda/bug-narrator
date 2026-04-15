@@ -42,5 +42,4 @@ site/build/
 !state/implementation_notes.md
 !state/validation_report.md
 
-# Risks are private — do not publish to GitHub
 state/risks.json
